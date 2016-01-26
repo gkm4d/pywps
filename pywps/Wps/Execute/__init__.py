@@ -537,9 +537,11 @@ class Execute(Request):
                 pass
 
         # make sure, all inputs are defined
-        for inp in self.wps.inputs["datainputs"]:
-            if not inp["identifier"] in self.process.inputs:
-                raise pywps.pywps.InvalidParameterValue("Input [%s] is not defined" % inp["identifier"])
+        if self.wps.inputs["datainputs"]:
+            for inp in self.wps.inputs["datainputs"]:
+                if not inp["identifier"] in self.process.inputs:
+                    raise pywps.pywps.InvalidParameterValue(
+                        "Input [%s] is not defined" % inp["identifier"])
 
         # make sure, all inputs do have values
         for identifier in self.process.inputs:
