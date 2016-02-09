@@ -208,9 +208,6 @@ class Execute(Request):
 
     __pickleFileName = "state-pywps"
 
-    # directories, which should be removed
-    dirsToBeRemoved = []
-
     # working directory and grass
     workingDir = ""
     grass = None
@@ -234,6 +231,9 @@ class Execute(Request):
         self.status = None
         self.spawned = spawned
         self.outputFileName = os.path.join(config.getConfigValue("server","outputPath"),self.getSessionId()+".xml")
+
+        # directories, which should be removed
+        self.dirsToBeRemoved = []
     
 
         # rawDataOutput
@@ -1374,13 +1374,17 @@ class Execute(Request):
         elif output.type == "ComplexValue":
 
             #self.checkMimeTypeIn(output)
-             # copy the file to safe place
-            outName = os.path.basename(output.value)
-            outSuffix = os.path.splitext(outName)[1]
-            tmp = tempfile.mkstemp(suffix=outSuffix, prefix="%s-%s" % (output.identifier,self.pid),dir=os.path.join(config.getConfigValue("server","outputPath")))
-            outFile = tmp[1]
 
-            if not self._samefile(output.value,outFile):
+            outputPath = config.getConfigValue("server","outputPath"))
+
+            # If the file is already in the configured output path, then leave it there.  Otherwise
+            #  copy it to the output path with a safe name.
+            if os.path.normpath(os.path.dirname(output.value)) == os.path.normpath(outputPath):
+                outFile = output.value
+            else:
+                outSuffix = os.path.splitext(outName)[1]
+                tmp = tempfile.mkstemp(suffix=outSuffix, prefix="%s-%s" % (output.identifier,self.pid), dir=os.path.join(outputPath))
+                outFile = tmp[1]
                 COPY(os.path.abspath(output.value), outFile)
 
             #check 
