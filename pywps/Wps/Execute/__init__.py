@@ -1375,7 +1375,7 @@ class Execute(Request):
 
             #self.checkMimeTypeIn(output)
 
-            outputPath = config.getConfigValue("server","outputPath"))
+            outputPath = config.getConfigValue("server","outputPath")
 
             # If the file is already in the configured output path, then leave it there.  Otherwise
             #  copy it to the output path with a safe name.
