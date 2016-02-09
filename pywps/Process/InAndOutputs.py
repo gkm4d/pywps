@@ -1021,8 +1021,8 @@ class ComplexOutput(Output):
             self.value = value.name
         elif value.__class__.__name__=='StringIO' or value.__class__.__name__=='StringO':
             import tempfile
-            from os import curdir
-            stringIOName = tempfile.mkstemp(prefix="pywpsOutput",dir=curdir) #(5, '/tmp/pywps-instanceS2j6ve/pywpsOutputZxSM6V')
+            from pywps import config
+            stringIOName = tempfile.mkstemp(prefix="%s-" % self.identifier, dir=os.path.join(config.getConfigValue("server","outputPath")))
             stringIOName=stringIOName[1]
 
             stringIOFile=open(stringIOName,"w")

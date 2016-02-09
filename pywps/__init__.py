@@ -175,8 +175,9 @@ class Pywps:
         """Class constructor
         """
 
-        # get settings
-        config.loadConfiguration(configFiles)
+        # get settings, if not already loaded
+        if not config.config:
+            config.loadConfiguration(configFiles)
         self.setLogFile()
         self.UUID = uuid.uuid1().__str__()
 
