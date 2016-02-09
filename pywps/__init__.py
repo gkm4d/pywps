@@ -93,7 +93,7 @@ import Exceptions
 import Wps
 from Exceptions import *
 
-import logging, uuid
+import logging, os, uuid
 
 # global variables
 METHOD_GET="GET"
