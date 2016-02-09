@@ -191,6 +191,23 @@ class Pywps:
         # find out the request method
         self.method = method
 
+        # create configured output path if it does not exist and ensure it 
+        # is accessible
+        try:
+            outputPath = config.getConfigValue("server","outputPath")
+            os.makedirs(outputPath)
+        except OSError:
+            if not os.path.isdir(outputPath):
+                raise
+
+        # create configured temp path if it does not exist and ensure it
+        # is accessible
+        try:
+            tempPath = config.getConfigValue("server","tempPath")
+            os.makedirs(tempPath)
+        except OSError:
+            if not os.path.isdir(tempPath):
+                raise
 
     def parseRequest(self,queryStringObject):
         """
