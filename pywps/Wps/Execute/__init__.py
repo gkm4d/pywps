@@ -1407,9 +1407,12 @@ class Execute(Request):
                 outFile = output.value
             else:
                 outSuffix = os.path.splitext(outName)[1]
-                tmp = tempfile.mkstemp(suffix=outSuffix, prefix="%s-%s" % (output.identifier,self.pid), dir=os.path.join(outputPath))
-                outFile = tmp[1]
+                fh, outFile = tempfile.mkstemp(
+                    suffix=outSuffix, 
+                    prefix="%s-%s" % (output.identifier,self.pid), 
+                    dir=outputPath)
                 COPY(os.path.abspath(output.value), outFile)
+                os.close(fh)
 
             #check 
             self.contentType = output.format["mimetype"]
